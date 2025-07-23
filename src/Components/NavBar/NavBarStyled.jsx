@@ -7,7 +7,7 @@ export const Nav = styled.nav`
   align-items: center;
   justify-content: space-between;
   background-color: #92b936;
-  padding: 8px 16px;
+  padding: 12px 24px;
   color: #333333;
   position: fixed;
   top: 0;
@@ -97,7 +97,7 @@ export const Hamburger = styled.div`
 export const NavLinks = styled.ul`
   list-style: none;
   display: flex;
-  gap: 5rem;
+  gap: 3rem;
   margin: 0;
   padding: 0;
   font-weight: bold;
@@ -105,16 +105,19 @@ export const NavLinks = styled.ul`
   li a {
     text-decoration: none;
     color: inherit;
+    letter-spacing: 0cap.5px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 
   li {
     text-decoration: none;
     cursor: pointer;
     font-size: 18px;
-    transition: color 0.3s;
+    transition: color 0.3s, transform 0.2s ease;
 
     &:hover {
       color: rgb(250, 250, 14);
+      transform: translate(-2px);
     }
   }
 

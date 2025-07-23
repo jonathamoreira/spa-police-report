@@ -41,7 +41,7 @@ export const NavBar = () => {
         </a>
         */}
 
-      <NavLinks isOpen={isOpen}>
+      <NavLinks $isOpen={isOpen}>
         <li>
           <Link to="/operacional">Operacional</Link>
         </li>

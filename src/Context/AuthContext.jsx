@@ -1,55 +1,63 @@
-import React, { createContext, useState, useEffect } from "react";
-import * as jwt_decode from "jwt-decode";
+// src/Context/AuthContext.jsx
+import React, { createContext, useState, useEffect, useContext } from "react";
 
-const AuthContext = createContext(null);
+// O contexto em si
+export const AuthContext = createContext(null);
 
-function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); // Informações decodificadas do token
-  const [token, setToken] = useState(null); // Token JWT armazenado
+// O provedor do contexto, que gerencia o estado da autenticação
+export const AuthProvider = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(null);
+  const [userRole, setUserRole] = useState(null); // 'admin' ou 'user'
+  const [loading, setLoading] = useState(true); // Estado de carregamento
 
+  // Efeito para carregar token e role do sessionStorage ao iniciar
   useEffect(() => {
-    // Verifica se há token salvo ao iniciar a aplicação
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      try {
-        const decoded = jwt_decode(storedToken);
-        setToken(storedToken);
-        setUser(decoded);
-      } catch (err) {
-        console.error("Token inválido:", err);
-        logout();
-      }
+    const storedToken = sessionStorage.getItem("token");
+    const storedRole = sessionStorage.getItem("userRole");
+    setLoading(false); // Carregamento concluído
+
+    if (storedToken && storedRole) {
+      setToken(storedToken);
+      setUserRole(storedRole);
+      setIsAuthenticated(true);
     }
   }, []);
 
-  const login = (jwtToken) => {
-    try {
-      const decoded = jwt_decode(jwtToken);
-      console.log("Payload do token:", decoded);
-      localStorage.setItem("token", jwtToken);
-      setToken(jwtToken);
-      setUser(decoded);
-    } catch (err) {
-      console.error("Erro ao decodificar token:", err);
-    }
+  // Função de login: armazena token e role
+  const login = (newToken, role) => {
+    sessionStorage.setItem("token", newToken);
+    sessionStorage.setItem("userRole", role);
+    setToken(newToken);
+    setUserRole(role);
+    setIsAuthenticated(true);
   };
 
+  // Função de logout: remove token e role
   const logout = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("userRole");
     setToken(null);
-    setUser(null);
+    setUserRole(null);
+    setIsAuthenticated(false);
   };
-
-  const isAuthenticated = !!user;
-  const role = user?.role || "user"; // padrão para usuários
 
   return (
     <AuthContext.Provider
-      value={{ user, token, login, logout, isAuthenticated, role }}
+      value={{ isAuthenticated, token, userRole, login, logout, loading }}
     >
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export { AuthContext, AuthProvider };
+// ATENÇÃO: EXPORTE O HOOK 'useAuth' DIRETAMENTE AQUI
+// Este é o hook customizado que os componentes usarão para acessar o contexto de autenticação
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  // Verificação para garantir que o hook seja usado dentro do AuthProvider
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};

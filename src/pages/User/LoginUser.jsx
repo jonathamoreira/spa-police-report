@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import axios from "axios";
+import { BaseUrl } from "../../Api/BaseUrl"; // Certifique-se de que o BaseUrl está configurado corretamente
 import {
   FormWrapper,
   FormCard,
@@ -23,22 +24,19 @@ export default function LoginUser() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log("handleLogin foi chamado!");
     try {
-      const response = await axios.post(
-        "http://localhost:4000/user/login",
-        // "https://apicrash.onrender.com/user/login",
-        {
-          email,
-          password: senha,
-        }
-      );
+      const response = await axios.post(`${BaseUrl.URL}/user/login`, {
+        email,
+        password: senha,
+      });
 
       const { token } = response.data;
 
-      login(token); // atualiza o AuthContext
+      login(token, "user"); // atualiza o AuthContext
 
       setErro("");
-      navigate("/protocolo");
+      navigate("/usuario"); // Redireciona para o dashboard do usuário
     } catch (error) {
       console.error("Erro no login:", error);
       setErro("Email ou senha inválidos.");

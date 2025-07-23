@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Importa o hook
 import axios from "axios";
+import { BaseUrl } from "../../Api/BaseUrl";
 import {
   FormWrapper,
   FormCard,
+  StyledForm,
   FormTitle,
   Input,
   Button,
@@ -17,9 +19,9 @@ export default function CadastroUsuario() {
 
   const handleCadastro = async (e) => {
     e.preventDefault();
+    console.log("handleCadastro foi chamado!");
     try {
-      await axios.post("http://localhost:4000/user/register", {
-        //"https://apicrash.onrender.com/user/register", {
+      await axios.post(`${BaseUrl.URL}/user/register`, {
         name,
         email,
         password,
@@ -39,30 +41,32 @@ export default function CadastroUsuario() {
 
   return (
     <FormWrapper>
-      <FormCard onSubmit={handleCadastro}>
-        <FormTitle>Cadastro de Usuário</FormTitle>
-        <Input
-          type="text"
-          placeholder="Nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <Input
-          type="email"
-          placeholder="E-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <Input
-          type="password"
-          placeholder="Senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <Button type="submit">Cadastrar</Button>
+      <FormCard>
+        <StyledForm onSubmit={handleCadastro}>
+          <FormTitle>Cadastro de Usuário</FormTitle>
+          <Input
+            type="text"
+            placeholder="Nome"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <Input
+            type="email"
+            placeholder="E-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <Input
+            type="password"
+            placeholder="Senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <Button type="submit">Cadastrar</Button>
+        </StyledForm>
       </FormCard>
     </FormWrapper>
   );
