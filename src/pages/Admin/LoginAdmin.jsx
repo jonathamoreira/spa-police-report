@@ -42,12 +42,22 @@ export default function LoginAdmin() {
           password,
         }
       );
-      login(response.data.token, "admin");
-      setSuccess("Login do admin realizado com sucesso! Redirecionando...");
-      // Redireciona o admin para o painel após um pequeno delay para ver a mensagem de sucesso
-      setTimeout(() => {
-        navigate("/admin/painel");
-      }, 1500);
+      const { token, role, name } = response.data; // Supondo que o token seja retornado na resposta
+      if (token && role && name) {
+        login(token, role, name);
+        //login(response.data.token, "admin");
+        setSuccess(`Login de ${name} realizado com sucesso!`); // Mensagem de sucesso
+        // Redireciona o admin para o painel após um pequeno delay para ver a mensagem de sucesso
+        setTimeout(() => {
+          navigate("/admin/painel");
+        }, 1500);
+      } else {
+        setError("Login realizado, seja bem-vindo!"); // Mensagem generica
+        login(token, role, "Admin"); // Faz o login, mas com um nome genérico
+        setTimeout(() => {
+          navigate("/admin/painel");
+        }, 1500);
+      }
     } catch (err) {
       console.error("Erro no login do admin:", err);
       setError(

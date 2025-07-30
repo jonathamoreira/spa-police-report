@@ -13,9 +13,11 @@ export const MainContent = styled.div`
   flex-grow: 1; /* Ocupa o restante do espaço */
   display: flex;
   flex-direction: column;
+
   transition: padding-left 0.3s ease; /* Transição suave para o padding */
 
   @media (min-width: 769px) {
+    margin-left: 250px; /* Espaço para a sidebar */
     padding-left: ${({ isSidebarOpen }) =>
       isSidebarOpen ? "250px" : "0px"}; /* Ajuste para a sidebar */
     transition: padding-left 0.3s ease; /* Transição suave */

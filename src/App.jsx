@@ -19,7 +19,7 @@ import NotFound from "./pages/NotFound/NotFound";
 
 // Importações para o Login e Register do USUÁRIO COMUM
 import RegisterUser from "./pages/user/RegisterUser";
-import LoginUser from "./pages/user/LoginUser";
+import LoginUser from "./pages/User/LoginUser";
 
 // importações para o Dashboard e CreateCrash do USUÁRIO COMUM
 import DashboardUser from "./pages/User/DashboardUser";
@@ -33,7 +33,10 @@ import AdminPainel from "./pages/Admin/AdminPainel";
 // Componentes das sub-rotas do Admin Painel
 import AdminDashboard from "./pages/Admin/AdminDashboard/AdminDashboard";
 import CrashReportsManagement from "./pages/Admin/CrashReportsManagement/CrashReportsManagement";
+import CrashDetailsPage from "./pages/Admin/AdminCrashDetails/AdminCrashDetails";
+import EditCrash from "./pages/Admin/AdminCrashDetails/EditCrash";
 import UserManagement from "./pages/Admin/UserManagement/UserManagement"; // Verifique o caminho exato deste (se está em User ou Admin)
+import EditUser from "./pages/Admin/UserManagement/EditUser";
 import AdminManagement from "./pages/Admin/AdminManagement/AdminManagement";
 
 import ButtonLogout from "./Components/Buttons/ButtonLogout";
@@ -89,9 +92,22 @@ function App() {
         <Route element={<ProtectedRoute requiredRole="admin" />}>
           <Route path="/admin/painel" element={<AdminPainel />}>
             <Route index element={<AdminDashboard />} />
+
             <Route path="ocorrencias" element={<CrashReportsManagement />} />
+            <Route
+              path="/admin/painel/ocorrencias/:id"
+              element={<CrashDetailsPage />}
+            />
+            <Route
+              path="/admin/painel/ocorrencias/editar/:id"
+              element={<EditCrash />}
+            />
             <Route path="usuarios" element={<UserManagement />} />
-            <Route path="admins" element={<AdminManagement />} />
+            <Route
+              path="/admin/painel/usuarios/editar/:id"
+              element={<EditUser />}
+            />
+            <Route path="/admin/painel/admins" element={<AdminManagement />} />
           </Route>
         </Route>
 

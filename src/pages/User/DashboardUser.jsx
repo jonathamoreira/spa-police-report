@@ -38,6 +38,8 @@ const OccurrenceCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  word-wrap: break-word;
+  overflow-y: auto;
 
   h3 {
     margin-top: 0;
@@ -222,7 +224,7 @@ export default function DashboardUser() {
           {occurrences.length > 0 &&
             occurrences.map((crash) => (
               <OccurrenceCard key={crash.id}>
-                <h3>Protocolo: {crash.protocol}</h3>
+                <h3>Protocolo: {crash._id.substring(0, 9)}</h3>
                 <p>
                   <strong>Nome:</strong> {crash.name}
                 </p>
