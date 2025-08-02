@@ -1,19 +1,18 @@
-// src/Components/Admin/AdminHeader/AdminHeaderStyled.js
 import styled from "styled-components";
 
 export const HeaderContainer = styled.header`
-  background-color: #ffffff;
+  background-color: var(--color-white);
   padding: 20px 30px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 8px; /* Arredondamento */
-  margin: 20px 20px 0 20px; /* Margens para dentro do MainContent */
+  border-radius: 8px;
+  margin: 20px 20px 0 20px;
 
   @media (min-width: 769px) {
     .hamburguer-button {
-      display: none; /* Esconde o botão hamburguer em telas grandes */
+      display: none;
     }
   }
 
@@ -28,15 +27,15 @@ export const HamburgerButton = styled.button`
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: #333;
+  color: var(--color-text-dark);
 
   @media (min-width: 769px) {
-    display: none; /* Esconde o botão em desktop */
+    display: none;
   }
 `;
 
 export const HeaderTitle = styled.h2`
-  color: #333;
+  color: var(--color-text-dark);
   margin: 0;
   font-size: 1.8em;
 
@@ -52,8 +51,8 @@ export const UserDisplay = styled.div`
 `;
 
 export const LogoutButton = styled.button`
-  background-color: #dc3545; /* Vermelho para logout */
-  color: white;
+  background-color: var(--color-danger);
+  color: var(--color-white);
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -62,6 +61,6 @@ export const LogoutButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #c82333;
+    background-color: var(--color-danger-dark);
   }
 `;

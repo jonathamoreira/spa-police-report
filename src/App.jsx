@@ -1,7 +1,7 @@
 // src/App.jsx
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { GlobalStyle } from "./GlobalStyled";
+import { GlobalStyle } from "./styles/GlobalStyled";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import { NavBar } from "./Components/NavBar/NavBar";
 import { AuthContext } from "./Context/AuthContext";
@@ -14,7 +14,7 @@ import Home from "./pages/Home/Home";
 import Educacao from "./pages/Educacao/Educacao";
 import Operacional from "./pages/Operacional/Operacional";
 import Servicos from "./pages/Servicos/Servicos";
-import Contatos from "./pages/Contatos";
+import Contatos from "./pages/Contatos/Contatos";
 import NotFound from "./pages/NotFound/NotFound";
 
 // Importações para o Login e Register do USUÁRIO COMUM
@@ -38,6 +38,7 @@ import EditCrash from "./pages/Admin/AdminCrashDetails/EditCrash";
 import UserManagement from "./pages/Admin/UserManagement/UserManagement"; // Verifique o caminho exato deste (se está em User ou Admin)
 import EditUser from "./pages/Admin/UserManagement/EditUser";
 import AdminManagement from "./pages/Admin/AdminManagement/AdminManagement";
+import EditAdmin from "./pages/Admin/AdminManagement/EditAdmin";
 
 import ButtonLogout from "./Components/Buttons/ButtonLogout";
 
@@ -108,6 +109,10 @@ function App() {
               element={<EditUser />}
             />
             <Route path="/admin/painel/admins" element={<AdminManagement />} />
+            <Route
+              path="/admin/painel/admins/editar/:id"
+              element={<EditAdmin />}
+            />
           </Route>
         </Route>
 

@@ -1,4 +1,7 @@
+// src/Components/NavBar/NavBarStyled.js
+
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const Nav = styled.nav`
   width: 100%;
@@ -6,9 +9,9 @@ export const Nav = styled.nav`
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  background-color: #92b936;
+  background-color: var(--color-primary);
   padding: 12px 24px;
-  color: #333333;
+  color: var(--color-text-dark);
   position: fixed;
   top: 0;
   left: 0;
@@ -34,8 +37,6 @@ export const LogoContainer = styled.div`
   }
 `;
 
-import { Link } from "react-router-dom";
-
 export const LogoLink = styled(Link)`
   text-decoration: none;
   color: inherit;
@@ -46,20 +47,20 @@ export const LogoLink = styled(Link)`
   }
 
   &:hover {
-    color: #000; /* ou outro efeito visual */
+    color: var(--color-text-dark);
   }
 `;
 
 export const BlinkLink = styled.h2`
   a {
-    color: #333333;
+    color: var(--color-text-dark);
     font-size: 18px;
     text-decoration: none;
     animation: blink 2s infinite;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: 1px 1px 2px var(--color-text-shadow);
 
     &:hover {
-      color: #e91e63;
+      color: var(--color-highlight);
       transform: scale(1.05);
     }
   }
@@ -85,7 +86,7 @@ export const Hamburger = styled.div`
   span {
     width: 25px;
     height: 3px;
-    background-color: #333;
+    background-color: var(--color-text-dark);
     border-radius: 2px;
   }
 
@@ -105,8 +106,8 @@ export const NavLinks = styled.ul`
   li a {
     text-decoration: none;
     color: inherit;
-    letter-spacing: 0cap.5px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px var(--color-text-shadow);
   }
 
   li {
@@ -116,7 +117,7 @@ export const NavLinks = styled.ul`
     transition: color 0.3s, transform 0.2s ease;
 
     &:hover {
-      color: rgb(250, 250, 14);
+      color: var(--color-highlight);
       transform: translate(-2px);
     }
   }
@@ -125,6 +126,6 @@ export const NavLinks = styled.ul`
     flex-direction: column;
     width: 100%;
     padding-top: 10px;
-    display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+    display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
   }
 `;

@@ -13,14 +13,15 @@ import {
   ButtonCancel,
 } from "../AdminCrashDetails/CrashDetailsStyled";
 
-const EditUserPage = () => {
+const EditAdminPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getToken } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    matricula: "",
+    password: "",
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -28,27 +29,26 @@ const EditUserPage = () => {
   const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchAdmin = async () => {
       try {
         const token = getToken();
-        const response = await axios.get(`${BaseUrl.URL}/user/users/${id}`, {
+        const response = await axios.get(`${BaseUrl.URL}/admin/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const user = response.data;
+        const admin = response.data;
         setFormData({
-          name: user.name,
-          email: user.email,
-          // Não incluímos a senha para evitar vazamento ou sobre-escrita acidental
+          name: admin.name,
+          matricula: admin.matricula,
         });
       } catch (err) {
-        console.error("Erro ao buscar detalhes do usuário:", err);
-        setError("Não foi possível carregar os dados do usuário.", err);
+        console.error("Erro ao buscar detalhes do admin:", err);
+        setError("Não foi possível carregar os dados do administrador.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUser();
+    fetchAdmin();
   }, [id, getToken]);
 
   const handleChange = (e) => {
@@ -66,28 +66,28 @@ const EditUserPage = () => {
     setSuccess(null);
 
     const dataToUpdate = { ...formData };
-    if (!dataToUpdate.password === "") {
+    if (!dataToUpdate.password) {
       delete dataToUpdate.password;
     }
 
     try {
       const token = getToken();
-      await axios.patch(`${BaseUrl.URL}/user/users/${id}`, dataToUpdate, {
+      await axios.put(`${BaseUrl.URL}/admin/${id}`, dataToUpdate, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      setSuccess("Usuário atualizado com sucesso!");
+      setSuccess("Admin atualizado com sucesso!");
       setTimeout(() => {
-        navigate("/admin/painel/usuarios", { replace: true });
-      }, 1000);
+        navigate("/admin/painel/admins", { replace: true });
+      }, 1500);
     } catch (err) {
-      console.error("Erro ao atualizar usuário:", err);
-      if (err.response && err.response.data && err.response.data.message) {
+      console.error("Erro ao atualizar admin:", err);
+      if (err.response?.data?.message) {
         setError(err.response.data.message);
       } else {
-        setError("Falha ao atualizar usuário.");
+        setError("Falha ao atualizar o administrador.");
       }
     } finally {
       setSaving(false);
@@ -95,7 +95,7 @@ const EditUserPage = () => {
   };
 
   if (loading) {
-    return <p>Carregando dados do usuário...</p>;
+    return <p>Carregando dados do administrador...</p>;
   }
 
   if (error) {
@@ -104,7 +104,7 @@ const EditUserPage = () => {
 
   return (
     <Container>
-      <Title>Editar Usuário {id.substring(0, 8)}...</Title>
+      <Title>Editar Administrador {id.substring(0, 8)}...</Title>
       {success && <p style={{ color: "green" }}>{success}</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -121,19 +121,27 @@ const EditUserPage = () => {
           />
         </DetailItem>
         <DetailItem>
-          <label htmlFor="email">Email:</label>
+          <label htmlFor="matricula">Matrícula:</label>
           <Input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
+            type="text"
+            id="matricula"
+            name="matricula"
+            value={formData.matricula}
             onChange={handleChange}
             required
           />
         </DetailItem>
-        <Button type="submit" disabled={saving}>
-          {saving ? "Salvando..." : "Salvar Alterações"}
-        </Button>
+        <DetailItem>
+          <label htmlFor="password">Senha:</label>
+          <Input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </DetailItem>
+
         <ButtonCancel
           type="button"
           onClick={() => navigate(-1)}
@@ -141,9 +149,12 @@ const EditUserPage = () => {
         >
           Voltar
         </ButtonCancel>
+        <Button type="submit" disabled={saving}>
+          {saving ? "Salvando..." : "Salvar Alterações"}
+        </Button>
       </FormCard>
     </Container>
   );
 };
 
-export default EditUserPage;
+export default EditAdminPage;

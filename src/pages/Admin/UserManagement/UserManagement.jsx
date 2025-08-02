@@ -79,7 +79,7 @@ const UserManagement = () => {
     ) {
       try {
         const token = getToken();
-        await axios.delete(`${BaseUrl.URL}/users/${userId}`, {
+        await axios.delete(`${BaseUrl.URL}/user/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Usuário excluído com sucesso!");

@@ -1,31 +1,29 @@
 // src/Components/Admin/AdminSidebar/AdminSidebarStyled.js
+
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
 export const SidebarContainer = styled.div`
   width: 250px;
-  background-color: #2c3e50; /* Cor escura para a sidebar */
-  color: #ecf0f1; /* Texto claro */
+  background-color: var(--color-background-dark);
+  color: var(--color-text-light);
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  position: fixed; /* Fixa a sidebar */
+  position: fixed;
   height: 100vh;
   top: 0;
   left: 0;
-  z-index: 1000; /* Garante que fique acima de outros elementos */
+  z-index: 1000;
 
-  // Estilos para desktop (acima de 768px)
   @media (min-width: 769px) {
-    // Mostrar a sidebar por padrão em telas maiores
-    transform: translateX(0); // Garante que esteja visível em desktop
-    transition: none; // Remove a transição quando não é necessário
+    transform: translateX(0);
+    transition: none;
   }
 
-  // Estilo para telas menores
   @media (max-width: 768px) {
     width: 250px;
     transform: translateX(${({ $isOpen }) => ($isOpen ? "0" : "-100%")});
-    transition: transform 0.3s ease-in-out; /* Transição suave para abrir/fechar */
+    transition: transform 0.3s ease-in-out;
     box-shadow: ${({ $isOpen }) =>
       $isOpen ? "2px 0 15px rgba(0, 0, 0, 0.3)" : "none"};
   }
@@ -33,8 +31,8 @@ export const SidebarContainer = styled.div`
 
 export const CloseButton = styled.button`
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  color: white;
+  border: 1px solid var(--color-tertiary-dark);
+  color: var(--color-white);
   font-size: 1.2em;
   padding: 5px 10px;
   cursor: pointer;
@@ -43,24 +41,24 @@ export const CloseButton = styled.button`
   right: 15px;
   border-radius: 5px;
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--color-background-dark);
   }
 
   @media (min-width: 769px) {
-    display: none; // Esconde o botão "X" em desktop
+    display: none;
   }
 `;
 
 export const SidebarHeader = styled.div`
   margin-bottom: 30px;
   padding-bottom: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--color-tertiary-dark);
   text-align: center;
 `;
 
 export const SidebarTitle = styled.h1`
   font-size: 1.8em;
-  color: #92b936; /* Cor de destaque */
+  color: var(--color-primary);
   margin: 0;
 `;
 
@@ -68,7 +66,7 @@ export const NavList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-  flex-grow: 1; /* Ocupa espaço disponível */
+  flex-grow: 1;
 `;
 
 export const NavItem = styled.li`
@@ -79,20 +77,20 @@ export const StyledNavLink = styled(NavLink)`
   display: flex;
   align-items: center;
   padding: 12px 15px;
-  color: #ecf0f1;
+  color: var(--color-text-light);
   text-decoration: none;
   font-size: 1.1em;
   border-radius: 5px;
   transition: background-color 0.3s ease, color 0.3s ease;
 
   &:hover {
-    background-color: #34495e; /* Um tom mais claro no hover */
-    color: #92b936;
+    background-color: var(--color-background-darker);
+    color: var(--color-primary);
   }
 
   &.active {
-    background-color: #92b936; /* Cor de destaque para o link ativo */
-    color: #ffffff;
+    background-color: var(--color-primary);
+    color: var(--color-white);
     font-weight: bold;
   }
 `;

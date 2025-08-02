@@ -29,20 +29,21 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Função de login: armazena token e role
-  const login = (newToken, role, nome) => {
+  const login = (newToken, nome, role) => {
     sessionStorage.setItem("token", newToken);
-    sessionStorage.setItem("userRole", role);
     sessionStorage.setItem("userName", nome);
+    sessionStorage.setItem("userRole", role);
     setToken(newToken);
+    setUserName(nome);
     setUserRole(role);
     setIsAuthenticated(true);
-    setUserName(nome);
   };
 
   // Função de logout: remove token e role
   const logout = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userRole");
+    sessionStorage.removeItem("userName");
     setToken(null);
     setUserRole(null);
     setUserName(null);

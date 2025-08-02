@@ -31,9 +31,9 @@ export default function LoginUser() {
         password: senha,
       });
 
-      const { token } = response.data;
+      const { token, name } = response.data;
 
-      login(token, "user"); // atualiza o AuthContext
+      login(token, name, "user"); // atualiza o AuthContext
 
       setErro("");
       navigate("/usuario"); // Redireciona para o dashboard do usuário

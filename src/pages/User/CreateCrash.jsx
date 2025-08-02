@@ -1,10 +1,9 @@
 // src/pages/User/CreateCrash.jsx
 import { useState } from "react";
 import axios from "axios";
-import { BaseUrl } from "../../Api/BaseUrl"; // Ajuste o caminho se necessário
+import { BaseUrl } from "../../Api/BaseUrl";
 import { useNavigate } from "react-router-dom";
 
-// Importar todos os styled components necessários
 import {
   FormWrapper,
   FormCard,
@@ -15,7 +14,8 @@ import {
   StyledForm,
   TextArea,
   Message,
-} from "../../styles/FormStyled"; // Ajuste o caminho se necessário
+  BackButton,
+} from "../../styles/FormStyled";
 
 const CreateCrash = () => {
   const [formData, setFormData] = useState({
@@ -31,8 +31,7 @@ const CreateCrash = () => {
   const [messageType, setMessageType] = useState("");
   const navigate = useNavigate();
 
-  // Número de telefone para contato
-  const contactPhone = "(XX) XXXXX-XXXX"; // Substitua pelo número real da equipe/central
+  const contactPhone = "(XX) XXXXX-XXXX";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -71,10 +70,6 @@ const CreateCrash = () => {
         },
       });
 
-      // Em vez de exibir a mensagem aqui, vamos passá-la para o Dashboard
-      // setMessage("Protocolo criado com sucesso!"); // Pode remover esta linha se a mensagem for apenas no dashboard
-      // setMessageType("success");
-
       setFormData({
         name: "",
         phone: "",
@@ -84,13 +79,11 @@ const CreateCrash = () => {
         description: "",
       });
 
-      // Redireciona para o dashboard, passando a mensagem e o telefone no state
       navigate("/usuario", {
         state: {
-          successMessage:
-            "Protocolo criado com sucesso! Uma viatura está sendo enviada ao local.",
+          successMessage: "Protocolo criado com sucesso!",
           contactPhone: contactPhone,
-          showConfirmation: true, // Flag para exibir a mensagem no dashboard
+          showConfirmation: true,
         },
       });
     } catch (err) {
@@ -105,6 +98,7 @@ const CreateCrash = () => {
   return (
     <FormWrapper>
       <FormCard as="div">
+        <BackButton onClick={() => navigate("/usuario")}>← Voltar</BackButton>
         <Title>Registrar Nova Ocorrência</Title>
         <StyledForm onSubmit={handleSubmit}>
           <FormTitle>Nome Completo</FormTitle>
@@ -147,7 +141,7 @@ const CreateCrash = () => {
             className="uppercase"
           />
           <FormTitle>Endereço da Ocorrência</FormTitle>
-          <Input
+          <TextArea
             name="address"
             value={formData.address}
             onChange={handleChange}
@@ -155,15 +149,14 @@ const CreateCrash = () => {
             rows="3"
             required
           />
-          <FormTitle>Descrição Detalhada</FormTitle>
+          <FormTitle>Descrição </FormTitle>
           <TextArea
             name="description"
             value={formData.description}
             onChange={handleChange}
-            placeholder="Descreva o que aconteceu em detalhes"
+            placeholder="Ex: colisão entre carro e motocicleta. "
             rows="5"
             required
-            className="uppercase"
           />
           <Button type="submit">Registrar Ocorrência</Button>
           {message && <Message type={messageType}>{message}</Message>}

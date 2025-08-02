@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import styled from "styled-components";
 
-// Botão estilizado (pode adaptar ao seu padrão visual)
+// Botão estilizado com variáveis de design
 const LogoutButton = styled.button`
-  background-color: #d9534f;
-  color: white;
+  background-color: var(--color-danger);
+  color: var(--color-white);
   border: none;
   padding: 0.5rem 1rem;
   margin: 1rem;
@@ -16,7 +16,7 @@ const LogoutButton = styled.button`
   align-self: flex-end;
 
   &:hover {
-    background-color: #c9302c;
+    background-color: var(--color-danger-dark);
   }
 `;
 
