@@ -18,7 +18,9 @@ export const NavBar = () => {
         <LogoLink to="/">
           <h1>Autarquia Municipal de Trânsito</h1>
         </LogoLink>
-        <img src="/img-logo.png" alt="imagem" />
+        <Link to="/admin/login">
+          <img src="/img-logo.png" alt="imagem" />
+        </Link>
       </LogoContainer>
 
       <Hamburger onClick={() => setIsOpen(!isOpen)}>
