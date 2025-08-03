@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { LogoLink } from "./NavBarStyled";
 import {
   Nav,
+  TopBar,
   LogoContainer,
   Hamburger,
   NavLinks,
@@ -12,49 +13,55 @@ import {
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   return (
     <Nav>
-      <LogoContainer>
-        <LogoLink to="/">
-          <h1>Autarquia Municipal de Trânsito</h1>
-        </LogoLink>
-        <Link to="/admin/login">
-          <img src="/img-logo.png" alt="imagem" />
-        </Link>
-      </LogoContainer>
+      <TopBar>
+        <LogoContainer>
+          <LogoLink to="/" onClick={closeMenu}>
+            <h1>Autarquia Municipal de Trânsito</h1>
+          </LogoLink>
+          <Link to="/admin/login" onClick={closeMenu}>
+            <img src="/img-logo.png" alt="imagem" />
+          </Link>
+        </LogoContainer>
 
-      <Hamburger onClick={() => setIsOpen(!isOpen)}>
-        <span />
-        <span />
-        <span />
-      </Hamburger>
+        <Hamburger onClick={() => setIsOpen(!isOpen)} type="button">
+          <span />
+          <span />
+          <span />
+        </Hamburger>
+      </TopBar>
 
       <BlinkLink>
-        <Link to="/operacional">Bateu? Chama a equipe aqui</Link>
-      </BlinkLink>
-
-      {/*
-        <a
-          href="https://wa.me/5585912345678"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <Link to="/user/login" onClick={closeMenu}>
           Bateu? Chama a equipe aqui
-        </a>
-        */}
+        </Link>
+      </BlinkLink>
 
       <NavLinks $isOpen={isOpen}>
         <li>
-          <Link to="/operacional">Operacional</Link>
+          <Link to="/operacional" onClick={closeMenu}>
+            Operacional
+          </Link>
         </li>
         <li>
-          <Link to="/servicos">Serviços</Link>
+          <Link to="/servicos" onClick={closeMenu}>
+            Serviços
+          </Link>
         </li>
         <li>
-          <Link to="/educacao">Educação</Link>
+          <Link to="/educacao" onClick={closeMenu}>
+            Educação
+          </Link>
         </li>
         <li>
-          <Link to="/contatos">Contatos</Link>
+          <Link to="/contatos" onClick={closeMenu}>
+            Contatos
+          </Link>
         </li>
       </NavLinks>
     </Nav>

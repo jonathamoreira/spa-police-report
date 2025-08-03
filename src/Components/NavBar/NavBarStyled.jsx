@@ -1,16 +1,13 @@
-// src/Components/NavBar/NavBarStyled.js
-
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 export const Nav = styled.nav`
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   background-color: var(--color-primary);
-  padding: 12px 24px;
+  padding: 1rem 2rem;
   color: var(--color-text-dark);
   position: fixed;
   top: 0;
@@ -18,15 +15,33 @@ export const Nav = styled.nav`
   right: 0;
   z-index: 1000;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    flex-direction: column; // Empilha os elementos em telas pequenas
+    padding: 12px;
+  }
+`;
+
+export const TopBar = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const LogoContainer = styled.div`
   display: flex;
   align-items: center;
+  gap: 10px;
 
   h1 {
-    margin-right: 10px;
     font-size: 24px;
+    margin-right: 10px;
+    transition: font-size 0.3s;
+
+    @media (max-width: 768px) {
+      font-size: 16px; // Fonte menor em telas menores
+    }
   }
 
   img {
@@ -40,11 +55,9 @@ export const LogoContainer = styled.div`
 export const LogoLink = styled(Link)`
   text-decoration: none;
   color: inherit;
-
-  h1 {
-    font-size: 24px;
-    margin-right: 10px;
-  }
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
   &:hover {
     color: var(--color-text-dark);
@@ -74,20 +87,29 @@ export const BlinkLink = styled.h2`
       opacity: 0;
     }
   }
+
+  @media (max-width: 768px) {
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+  }
 `;
 
-export const Hamburger = styled.div`
+export const Hamburger = styled.button`
   display: none;
   flex-direction: column;
   cursor: pointer;
   gap: 4px;
-  margin-left: auto;
+  background: none;
+  border: none;
+  padding: 0;
 
   span {
     width: 25px;
     height: 3px;
     background-color: var(--color-text-dark);
     border-radius: 2px;
+    transition: all 0.3s ease-in-out;
   }
 
   @media (max-width: 768px) {
@@ -125,7 +147,17 @@ export const NavLinks = styled.ul`
   @media (max-width: 768px) {
     flex-direction: column;
     width: 100%;
-    padding-top: 10px;
-    display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-primary);
+    position: relative;
+    overflow: hidden;
+    max-height: ${({ $isOpen }) => ($isOpen ? "300px" : "0")};
+    transition: max-height 0.3s ease-in-out;
+
+    li {
+      padding: 1rem 12px;
+      font-size: 16px;
+    }
   }
 `;
