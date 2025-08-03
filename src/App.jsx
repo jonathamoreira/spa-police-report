@@ -18,7 +18,7 @@ import Contatos from "./pages/Contatos/Contatos";
 import NotFound from "./pages/NotFound/NotFound";
 
 // Importações para o Login e Register do USUÁRIO COMUM
-import RegisterUser from "./pages/user/RegisterUser";
+import RegisterUser from "./pages/User/RegisterUser";
 import LoginUser from "./pages/User/LoginUser";
 
 // importações para o Dashboard e CreateCrash do USUÁRIO COMUM
