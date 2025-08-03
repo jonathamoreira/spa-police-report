@@ -115,7 +115,7 @@ export default function DashboardUser() {
         <WelcomeTitle>Bem-vindo(a),{userName || "Usuário"}</WelcomeTitle>
 
         <CreateProtocolButton onClick={handleCreateProtocol}>
-          Registrar Novo Protocolo
+          Registrar Ocorrência
         </CreateProtocolButton>
       </HeaderSection>
 

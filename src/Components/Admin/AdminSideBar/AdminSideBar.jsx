@@ -1,5 +1,6 @@
 // src/Components/Admin/AdminSidebar/AdminSidebar.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   SidebarContainer,
   SidebarHeader,
@@ -20,7 +21,9 @@ const AdminSidebar = ({ $isOpen, toggleSidebar }) => {
       )}
 
       <SidebarHeader>
-        <SidebarTitle>Painel Admin</SidebarTitle>
+        <Link to="/admin/register">
+          <SidebarTitle>Painel Admin</SidebarTitle>
+        </Link>
       </SidebarHeader>
       <NavList>
         <NavItem>
