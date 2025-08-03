@@ -1,38 +1,33 @@
 import { useContext } from "react";
-import { Navigate, Outlet } from "react-router-dom"; // Importe Outlet
+import { Navigate, Outlet } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 
 export default function ProtectedRoute({ requiredRole }) {
-  // Remova 'children' da desestruturação
-  const { isAuthenticated, userRole, loading } = useContext(AuthContext); // Inclua 'loading' do contexto
+  const { isAuthenticated, userRole, loading } = useContext(AuthContext);
 
-  // console.log para depuração (pode remover depois)
-
-  // Se você tem um estado de carregamento no AuthContext (recomendado)
   if (loading) {
-    return <div>Carregando autenticação...</div>; // Ou um spinner, ou null
+    return <div>Carregando autenticação...</div>;
   }
 
-  // Se o usuário não estiver logado
   if (!isAuthenticated) {
-    if (requiredRole === "admin") {
-      return <Navigate to="/admin/login" replace />;
-    }
+    // Redireciona com base na role necessária para o login
+    return requiredRole === "admin" ? (
+      <Navigate to="/admin/login" replace />
+    ) : (
+      <Navigate to="/user/login" replace />
+    );
+  } // --- Lógica de permissão corrigida --- // Permite se a role do usuário for a necessária OU se for super_admin
 
-    return <Navigate to="/user/login" replace />; // Mais específico para login de usuário
-  }
+  const hasPermission = userRole === requiredRole || userRole === "super_admin";
 
-  // Se o usuário estiver logado, mas não tiver o papel exigido
-  if (requiredRole && userRole !== requiredRole) {
-    // Exemplo de lógica mais granular para redirecionamento por role mismatch
-    if (userRole === "admin") {
-      // Se um admin tentar acessar rota de user
-      return <Navigate to="/admin/painel" replace />;
-    }
-    // Se um user tentar acessar rota de admin, ou outra role mismatch
-    return <Navigate to="/" replace />; // Redireciona para a home ou uma página de acesso negado
-  }
+  if (!hasPermission) {
+    // Se não tiver permissão, redireciona para a home ou painel apropriado
+    return userRole === "admin" ? (
+      <Navigate to="/admin/painel" replace />
+    ) : (
+      <Navigate to="/" replace />
+    );
+  } // Se tudo estiver ok, renderiza o componente filho
 
-  // Se tudo estiver ok (autenticado e role correta), renderiza o componente da rota filha
-  return <Outlet />; // <--- ESSA É A CORREÇÃO PRINCIPAL!
+  return <Outlet />;
 }

@@ -1,6 +1,6 @@
 // src/pages/Admin/CrashReportsManagement/CrashReportsManagement.jsx
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import axios from "axios";
+import api from "../../../services/api";
 import { AuthContext } from "../../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
@@ -20,7 +20,6 @@ import {
   SearchInput,
   ControlsContainer,
 } from "./CrashReportsManagementStyled";
-import { BaseUrl } from "../../../Api/BaseUrl";
 
 const CrashReportsManagement = () => {
   const { getToken } = useContext(AuthContext);
@@ -43,12 +42,8 @@ const CrashReportsManagement = () => {
       if (!token) {
         throw new Error("Token de autenticação não encontrado.");
       }
-
-      const requestUrl = `${BaseUrl.URL}/crash/crashes`;
-      console.log("URL da requisição Axios:", requestUrl);
-
       // Faz a requisição para buscar todas as ocorrências
-      const response = await axios.get(requestUrl, {
+      const response = await api.get("/crash/crashes", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -140,7 +135,7 @@ const CrashReportsManagement = () => {
     if (window.confirm("Tem certeza que deseja excluir esta ocorrência?")) {
       try {
         const token = getToken();
-        await axios.delete(`${BaseUrl.URL}/crash/crashes/${id}`, {
+        await api.delete(`/crash/crashes/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Ocorrência excluída com sucesso!");

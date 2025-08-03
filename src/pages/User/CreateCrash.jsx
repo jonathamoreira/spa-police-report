@@ -1,8 +1,8 @@
 // src/pages/User/CreateCrash.jsx
-import { useState } from "react";
-import axios from "axios";
-import { BaseUrl } from "../../Api/BaseUrl";
+import { useState, useEffect, useContext } from "react";
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../Context/AuthContext";
 
 import {
   FormWrapper,
@@ -18,6 +18,7 @@ import {
 } from "../../styles/FormStyled";
 
 const CreateCrash = () => {
+  const { userName } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -32,6 +33,15 @@ const CreateCrash = () => {
   const navigate = useNavigate();
 
   const contactPhone = "(XX) XXXXX-XXXX";
+
+  useEffect(() => {
+    if (userName) {
+      setFormData((prevData) => ({
+        ...prevData,
+        name: userName,
+      }));
+    }
+  }, [userName]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,11 +74,7 @@ const CreateCrash = () => {
         return;
       }
 
-      await axios.post(`${BaseUrl.URL}/crash`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await api.post("/crash", formData);
 
       setFormData({
         name: "",
@@ -104,10 +110,11 @@ const CreateCrash = () => {
           <FormTitle>Nome Completo</FormTitle>
           <Input
             type="text"
-            name="name"
+            name="nome"
             value={formData.name}
             onChange={handleChange}
-            placeholder="Seu nome completo"
+            placeholder="Seu nome"
+            readOnly // Desabilita a edição
             required
           />
           <FormTitle>Telefone</FormTitle>

@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
-import axios from "axios";
-import { BaseUrl } from "../../Api/BaseUrl"; // Certifique-se de que o BaseUrl está configurado corretamente
+import api from "../../services/api";
 import {
   FormWrapper,
   FormCard,
@@ -26,12 +25,13 @@ export default function LoginUser() {
     e.preventDefault();
     console.log("handleLogin foi chamado!");
     try {
-      const response = await axios.post(`${BaseUrl.URL}/user/login`, {
+      const response = await api.post("/user/login", {
         email,
         password: senha,
       });
 
-      const { token, name } = response.data;
+      const { token, user } = response.data;
+      const name = user.name;
 
       login(token, name, "user"); // atualiza o AuthContext
 

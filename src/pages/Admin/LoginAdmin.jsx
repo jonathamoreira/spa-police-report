@@ -1,8 +1,9 @@
 // src/pages/Admin/LoginAdmin.jsx
 import { useState, useContext } from "react";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom"; // Importe useNavigate
 import { AuthContext } from "../../Context/AuthContext";
+import api from "../../services/api";
 import {
   FormWrapper, // Importe o FormWrapper para o layout de fundo
   FormCard, // Importe o FormCard para o card do formulário
@@ -34,17 +35,13 @@ export default function LoginAdmin() {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:4000/admin/login", //rota de teste local
-        //"https://apicrash.onrender.com/admin/login",
-        {
-          matricula: Number(matricula),
-          password,
-        }
-      );
-      const { token, role, name } = response.data; // Supondo que o token seja retornado na resposta
+      const response = await api.post("/admin/login", {
+        matricula: Number(matricula),
+        password,
+      });
+      const { token, name, role } = response.data; // Supondo que o token seja retornado na resposta
       if (token && role && name) {
-        login(token, role, name);
+        login(token, name, role);
         //login(response.data.token, "admin");
         setSuccess(`Login de ${name} realizado com sucesso!`); // Mensagem de sucesso
         // Redireciona o admin para o painel após um pequeno delay para ver a mensagem de sucesso

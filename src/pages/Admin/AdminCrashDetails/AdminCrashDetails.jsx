@@ -1,9 +1,9 @@
 // src/pages/Admin/CrashDetailsPage/CrashDetailsPage.jsx
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../../services/api";
 import { AuthContext } from "../../../Context/AuthContext";
-import { BaseUrl } from "../../../Api/BaseUrl";
+
 // Importe seus componentes de estilo ou defina-os aqui
 import {
   Container,
@@ -34,7 +34,7 @@ const CrashDetailsPage = () => {
           );
         }
 
-        const response = await axios.get(`${BaseUrl.URL}/crash/crashes/${id}`, {
+        const response = await api.get(`/crash/crashes/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { BaseUrl } from "../../../Api/BaseUrl";
+import api from "../../../services/api";
 import { AuthContext } from "../../../Context/AuthContext";
-import axios from "axios";
 import {
   Container,
   Title,
@@ -31,7 +30,7 @@ const EditUserPage = () => {
     const fetchUser = async () => {
       try {
         const token = getToken();
-        const response = await axios.get(`${BaseUrl.URL}/user/users/${id}`, {
+        const response = await api.get(`/user/users/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const user = response.data;
@@ -72,7 +71,7 @@ const EditUserPage = () => {
 
     try {
       const token = getToken();
-      await axios.patch(`${BaseUrl.URL}/user/users/${id}`, dataToUpdate, {
+      await api.patch(`/user/users/${id}`, dataToUpdate, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -9,15 +9,15 @@ export const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState(null);
-  const [userRole, setUserRole] = useState(null); // 'admin' ou 'user'
   const [userName, setUserName] = useState(null); // Nome do usuário
+  const [userRole, setUserRole] = useState(null); // 'admin' ou 'user'
   const [loading, setLoading] = useState(true); // Estado de carregamento
 
   // Efeito para carregar token e role do sessionStorage ao iniciar
   useEffect(() => {
     const storedToken = sessionStorage.getItem("token");
-    const storedRole = sessionStorage.getItem("userRole");
     const storedUserName = sessionStorage.getItem("userName");
+    const storedRole = sessionStorage.getItem("userRole");
     setLoading(false); // Carregamento concluído
 
     if (storedToken && storedRole) {

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import api from "../../../services/api";
 import { ContentWrapper } from "../AdminPainelStyled";
 import { AuthContext } from "../../../Context/AuthContext";
-import { BaseUrl } from "../../../Api/BaseUrl";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -53,7 +52,7 @@ const AdminManagement = () => {
     setError(null);
     try {
       const token = getToken();
-      const response = await axios.get(`${BaseUrl.URL}/admin/`, {
+      const response = await api.get("/admin/", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAdmins(response.data);
@@ -73,7 +72,7 @@ const AdminManagement = () => {
     if (window.confirm("Tem certeza que deseja excluir este administrador?")) {
       try {
         const token = getToken();
-        await axios.delete(`${BaseUrl.URL}/admin/${adminId}`, {
+        await api.delete(`/admin/${adminId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Administrador excluído com sucesso!");

@@ -62,17 +62,15 @@ function App() {
 
         {/* Rotas Protegidas para USUÁRIOS COMUNS - UNIFICADAS AQUI */}
         <Route element={<ProtectedRoute requiredRole="user" />}>
-          {/* Dashboard do usuário, agora com ButtonLogout */}
           <Route
             path="/usuario"
             element={
               <>
-                <ButtonLogout /> {/* Renderiza o botão de logout aqui */}
+                <ButtonLogout />
                 <DashboardUser />
               </>
             }
           />
-          {/* Criação de Protocolo, com ButtonLogout */}
           <Route
             path="/protocolo"
             element={
@@ -82,7 +80,6 @@ function App() {
               </>
             }
           />
-          {/* Se houver outras rotas de usuário, adicione aqui */}
         </Route>
 
         {/* Rotas de Autenticação Admin (não protegidas) */}

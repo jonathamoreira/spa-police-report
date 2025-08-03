@@ -1,6 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom"; // Importe useNavigate
+import api from "../../services/api"; // Importe o serviço de API
 import {
   FormWrapper,
   FormCard,
@@ -33,7 +34,7 @@ export default function RegisterAdmin() {
 
     try {
       // Envia os dados do novo administrador para o backend
-      await axios.post("http://localhost:4000/admin", {
+      await api.post("/admin/", {
         name,
         matricula: Number(matricula),
         password,

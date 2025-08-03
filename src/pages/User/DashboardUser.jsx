@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import api from "../../services/api";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { AuthContext } from "../../Context/AuthContext";
-import { BaseUrl } from "../../Api/BaseUrl";
+
 import {
   DashboardContainer,
   HeaderSection,
@@ -25,7 +25,7 @@ export default function DashboardUser() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { token, nome } = useContext(AuthContext); // Pegue o user do contexto
+  const { token, userName } = useContext(AuthContext); // Pegue o user do contexto
 
   useEffect(() => {
     if (location.state && location.state.showConfirmation) {
@@ -59,11 +59,7 @@ export default function DashboardUser() {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get(`${BaseUrl.URL}/crash/mine`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await api.get("/crash/mine");
 
         const sortedOccurrences = response.data.sort((a, b) => {
           const dateA = new Date(a.createdAt || a.timestamp);
@@ -116,7 +112,7 @@ export default function DashboardUser() {
   return (
     <DashboardContainer>
       <HeaderSection>
-        <WelcomeTitle>Bem-vindo(a), {nome || "Usuário"}</WelcomeTitle>
+        <WelcomeTitle>Bem-vindo(a),{userName || "Usuário"}</WelcomeTitle>
 
         <CreateProtocolButton onClick={handleCreateProtocol}>
           Registrar Novo Protocolo
@@ -127,6 +123,7 @@ export default function DashboardUser() {
         <ConfirmationBox>
           <p>{confirmationMessageText}</p>
           <p>
+            Uma equipe acaba de ser acionada. <br />
             Em caso de dúvidas, ligue para:{" "}
             <a href={`tel:${confirmationContactPhone.replace(/\D/g, "")}`}>
               {confirmationContactPhone}

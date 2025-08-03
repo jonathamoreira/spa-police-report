@@ -12,7 +12,6 @@ import {
 
 const AdminHeader = ({ toggleSidebar }) => {
   const { logout, userName } = useAuth(); // Assume que useAuth fornece logout
-  // Você pode obter o nome do admin logado do contexto de autenticação ou de outra forma
   const navigate = useNavigate(); // Para redirecionar após o logout
 
   const handleLogout = () => {
@@ -26,7 +25,6 @@ const AdminHeader = ({ toggleSidebar }) => {
         {userName ? `Bem-vindo, ${userName}!` : "Bem-vindo, Administrador!"}
       </HeaderTitle>
       <UserDisplay>
-        {/* <p>Olá, [Nome do Admin]</p> */} {/* Adicionar nome do admin aqui */}
         <LogoutButton onClick={handleLogout}>Sair</LogoutButton>
       </UserDisplay>
     </HeaderContainer>

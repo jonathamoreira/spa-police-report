@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Importa o hook
-import axios from "axios";
-import { BaseUrl } from "../../Api/BaseUrl";
+import api from "../../services/api";
 import {
   FormWrapper,
   FormCard,
@@ -21,7 +20,7 @@ export default function CadastroUsuario() {
     e.preventDefault();
     console.log("handleCadastro foi chamado!");
     try {
-      await axios.post(`${BaseUrl.URL}/user/register`, {
+      await api.post("/user/register", {
         name,
         email,
         password,

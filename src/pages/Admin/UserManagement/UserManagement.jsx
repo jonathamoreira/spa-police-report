@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import api from "../../../services/api";
 import { ContentWrapper } from "../AdminPainelStyled";
 import { AuthContext } from "../../../Context/AuthContext";
-import { BaseUrl } from "../../../Api/BaseUrl";
+
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -53,7 +53,7 @@ const UserManagement = () => {
     setError(null);
     try {
       const token = getToken();
-      const response = await axios.get(`${BaseUrl.URL}/user/users`, {
+      const response = await api.get("/user/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
       // Filtra para exibir apenas usuários com a role 'user'
@@ -79,7 +79,7 @@ const UserManagement = () => {
     ) {
       try {
         const token = getToken();
-        await axios.delete(`${BaseUrl.URL}/user/users/${userId}`, {
+        await api.delete(`/user/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Usuário excluído com sucesso!");

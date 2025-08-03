@@ -4,8 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { ContentWrapper } from "../AdminPainelStyled";
 import styled from "styled-components";
 import { AuthContext } from "../../../Context/AuthContext";
-import axios from "axios";
-import { BaseUrl } from "../../../Api/BaseUrl";
+import api from "../../../services/api";
 
 // Estilos para os cards de métricas
 const CardContainer = styled.div`
@@ -68,18 +67,12 @@ const AdminDashboard = () => {
         const token = getToken();
         const headers = { Authorization: `Bearer ${token}` };
 
-        const usersResponse = await axios.get(
-          `${BaseUrl.URL}/user/users/count`,
-          { headers }
-        );
-        const adminsResponse = await axios.get(`${BaseUrl.URL}/admin/count`, {
+        const usersResponse = await api.get("/user/users/count", { headers });
+        const adminsResponse = await api.get("/admin/count", {
           headers,
         });
-        const ocorrenciasResponse = await axios.get(
-          `${BaseUrl.URL}/crash/count`,
-          { headers }
-        );
-        const lastCrashResponse = await axios.get(`${BaseUrl.URL}/crash/last`, {
+        const ocorrenciasResponse = await api.get("/crash/count", { headers });
+        const lastCrashResponse = await api.get("/crash/last", {
           headers,
         });
 
