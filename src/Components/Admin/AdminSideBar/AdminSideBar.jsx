@@ -8,7 +8,7 @@ import {
   NavItem,
   StyledNavLink,
   CloseButton,
-} from "./AdminSidebarStyled";
+} from "./AdminSideBarStyled";
 
 const AdminSidebar = ({ $isOpen, toggleSidebar }) => {
   // Recebendo $isOpen
