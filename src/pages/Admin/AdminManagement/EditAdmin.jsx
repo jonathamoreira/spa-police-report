@@ -16,40 +16,53 @@ import {
 const EditAdminPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getToken } = useContext(AuthContext);
+  // Acessa as propriedades diretamente do AuthContext
+  const {
+    getToken,
+    userId,
+    userRole,
+    loading: authLoading,
+  } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: "",
     matricula: "",
     password: "",
   });
-  const [loading, setLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(true); // Estado de loading para os dados do admin
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  useEffect(() => {
-    const fetchAdmin = async () => {
-      try {
-        const token = getToken();
-        const response = await api.get(`/admin/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const admin = response.data;
-        setFormData({
-          name: admin.name,
-          matricula: admin.matricula,
-        });
-      } catch (err) {
-        console.error("Erro ao buscar detalhes do admin:", err);
-        setError("Não foi possível carregar os dados do administrador.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Variáveis de permissão com base nos dados do contexto
+  const canEditAllFields = userRole === "super_admin";
+  const isEditingOwnProfile = userId && id === userId;
 
-    fetchAdmin();
-  }, [id, getToken]);
+  useEffect(() => {
+    // Só busca os dados do admin se a autenticação já tiver carregado
+    if (!authLoading) {
+      const fetchAdmin = async () => {
+        try {
+          const token = getToken();
+          const response = await api.get(`/admin/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const admin = response.data;
+          setFormData({
+            name: admin.name,
+            matricula: admin.matricula,
+          });
+        } catch (err) {
+          console.error("Erro ao buscar detalhes do admin:", err);
+          setError("Não foi possível carregar os dados do administrador.");
+        } finally {
+          setDataLoading(false);
+        }
+      };
+
+      fetchAdmin();
+    }
+  }, [id, getToken, authLoading]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -94,7 +107,7 @@ const EditAdminPage = () => {
     }
   };
 
-  if (loading) {
+  if (authLoading || dataLoading) {
     return <p>Carregando dados do administrador...</p>;
   }
 
@@ -118,6 +131,7 @@ const EditAdminPage = () => {
             value={formData.name}
             onChange={handleChange}
             required
+            disabled={!isEditingOwnProfile && !canEditAllFields}
           />
         </DetailItem>
         <DetailItem>
@@ -129,6 +143,7 @@ const EditAdminPage = () => {
             value={formData.matricula}
             onChange={handleChange}
             required
+            disabled={!canEditAllFields}
           />
         </DetailItem>
         <DetailItem>
@@ -139,6 +154,8 @@ const EditAdminPage = () => {
             name="password"
             value={formData.password}
             onChange={handleChange}
+            placeholder="Deixe em branco para não alterar"
+            disabled={!isEditingOwnProfile && !canEditAllFields}
           />
         </DetailItem>
 
@@ -149,7 +166,10 @@ const EditAdminPage = () => {
         >
           Voltar
         </ButtonCancel>
-        <Button type="submit" disabled={saving}>
+        <Button
+          type="submit"
+          disabled={saving || (!isEditingOwnProfile && !canEditAllFields)}
+        >
           {saving ? "Salvando..." : "Salvar Alterações"}
         </Button>
       </FormCard>

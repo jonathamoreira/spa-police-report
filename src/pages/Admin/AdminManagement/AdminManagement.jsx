@@ -1,51 +1,39 @@
+// src/pages/Admin/AdminManagement/AdminManagement.jsx
+
 import React, { useState, useEffect, useContext } from "react";
 import api from "../../../services/api";
 import { ContentWrapper } from "../AdminPainelStyled";
 import { AuthContext } from "../../../Context/AuthContext";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-
-// Componentes de estilo simples para a tabela
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-`;
-
-const Th = styled.th`
-  background-color: #f2f2f2;
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-`;
-
-const Td = styled.td`
-  border: 1px solid #ddd;
-  padding: 8px;
-  word-wrap: break-word;
-`;
-
-const Button = styled.button`
-  padding: 5px 10px;
-  margin-right: 5px;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  background-color: ${(props) => (props.danger ? "#e74c3c" : "#3498db")};
-
-  &:disabled {
-    background-color: #bdc3c7;
-    cursor: not-allowed;
-  }
-`;
+import {
+  ResponsiveWrapper,
+  Table,
+  Th,
+  Td,
+  Button,
+  ButtonContainer,
+  CardContainer,
+  Card,
+  CardItem,
+  CardLabel,
+  CardValue,
+} from "./AdminManagementStyled";
 
 const AdminManagement = () => {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { getToken, getUserId } = useContext(AuthContext); // Pega o ID do admin logado
+  const { getToken, userId, userRole } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const fetchAdmins = async () => {
     setLoading(true);
@@ -58,7 +46,7 @@ const AdminManagement = () => {
       setAdmins(response.data);
     } catch (err) {
       console.error("Erro ao buscar admins:", err);
-      setError("Não foi possível carregar a lista de administradores.", err);
+      setError("Não foi possível carregar a lista de administradores.");
     } finally {
       setLoading(false);
     }
@@ -68,6 +56,15 @@ const AdminManagement = () => {
     fetchAdmins();
   }, []);
 
+  // Adiciona um useEffect para monitorar o estado do usuário
+  useEffect(() => {
+    // Se o userId for válido, isso indica que o contexto foi carregado
+  }, [userId, userRole]);
+
+  const loggedInUserId = userId;
+  const loggedInUserRole = userRole;
+  const canEditAll = loggedInUserRole === "super_admin";
+
   const handleDelete = async (adminId) => {
     if (window.confirm("Tem certeza que deseja excluir este administrador?")) {
       try {
@@ -76,7 +73,7 @@ const AdminManagement = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Administrador excluído com sucesso!");
-        fetchAdmins(); // Atualiza a lista
+        fetchAdmins();
       } catch (err) {
         console.error("Erro ao excluir administrador:", err);
         alert("Falha ao excluir o administrador. Verifique sua permissão.");
@@ -85,7 +82,6 @@ const AdminManagement = () => {
   };
 
   const handleEdit = (adminId) => {
-    // Navega para a futura página de edição de admin
     navigate(`/admin/painel/admins/editar/${adminId}`);
   };
 
@@ -99,39 +95,89 @@ const AdminManagement = () => {
 
   return (
     <ContentWrapper>
-      <h1>Gestão de Administradores</h1>
-      {admins.length > 0 ? (
-        <Table>
-          <thead>
-            <tr>
-              <Th>Nome</Th>
-              <Th>Matrícula</Th>
-              <Th>Ações</Th>
-            </tr>
-          </thead>
-          <tbody>
+      <ResponsiveWrapper>
+        <h1>Gestão de Administradores</h1>
+
+        {isMobile ? (
+          <CardContainer>
             {admins.map((admin) => (
-              <tr key={admin._id}>
-                <Td>{admin.name}</Td>
-                <Td>{admin.matricula}</Td>
-                <Td>
-                  {/* Desabilita o botão de excluir o próprio admin logado */}
-                  <Button onClick={() => handleEdit(admin._id)}>Editar</Button>
-                  <Button
-                    danger
-                    onClick={() => handleDelete(admin._id)}
-                    disabled={admin._id === getUserId()}
-                  >
-                    Excluir
-                  </Button>
-                </Td>
-              </tr>
+              <Card key={admin._id}>
+                <CardItem>
+                  <CardLabel>Nome:</CardLabel>
+                  <CardValue>{admin.name}</CardValue>
+                </CardItem>
+                <CardItem>
+                  <CardLabel>Matrícula:</CardLabel>
+                  <CardValue>{admin.matricula}</CardValue>
+                </CardItem>
+                <CardItem>
+                  <ButtonContainer>
+                    {/* Botão de Editar */}
+                    {(canEditAll ||
+                      (loggedInUserId && admin._id === loggedInUserId)) && (
+                      <Button onClick={() => handleEdit(admin._id)}>
+                        Editar
+                      </Button>
+                    )}
+                    {/* Botão de Excluir */}
+                    {canEditAll &&
+                      loggedInUserId &&
+                      admin._id !== loggedInUserId && (
+                        <Button danger onClick={() => handleDelete(admin._id)}>
+                          Excluir
+                        </Button>
+                      )}
+                  </ButtonContainer>
+                </CardItem>
+              </Card>
             ))}
-          </tbody>
-        </Table>
-      ) : (
-        <p>Nenhum administrador encontrado.</p>
-      )}
+          </CardContainer>
+        ) : (
+          <Table>
+            <thead>
+              <tr>
+                <Th>Nome</Th>
+                <Th>Matrícula</Th>
+                <Th>Ações</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {admins.map((admin) => (
+                <tr key={admin._id}>
+                  <Td>{admin.name}</Td>
+                  <Td>{admin.matricula}</Td>
+                  <Td>
+                    <ButtonContainer>
+                      {/* Botão de Editar */}
+                      {(canEditAll ||
+                        (loggedInUserId && admin._id === loggedInUserId)) && (
+                        <Button onClick={() => handleEdit(admin._id)}>
+                          Editar
+                        </Button>
+                      )}
+                      {/* Botão de Excluir */}
+                      {canEditAll &&
+                        loggedInUserId &&
+                        admin._id !== loggedInUserId && (
+                          <Button
+                            danger
+                            onClick={() => handleDelete(admin._id)}
+                          >
+                            Excluir
+                          </Button>
+                        )}
+                    </ButtonContainer>
+                  </Td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+
+        {admins.length === 0 && !loading && (
+          <p>Nenhum administrador encontrado.</p>
+        )}
+      </ResponsiveWrapper>
     </ContentWrapper>
   );
 };

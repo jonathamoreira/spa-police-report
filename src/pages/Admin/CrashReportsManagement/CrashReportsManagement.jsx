@@ -19,6 +19,11 @@ import {
   PaginationButton,
   SearchInput,
   ControlsContainer,
+  Card,
+  CardContainer,
+  CardItem,
+  CardLabel,
+  CardValue,
 } from "./CrashReportsManagementStyled";
 
 const CrashReportsManagement = () => {
@@ -32,6 +37,8 @@ const CrashReportsManagement = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   // Função para buscar TODAS as ocorrências do backend
   const fetchAllCrashes = useCallback(async () => {
@@ -87,6 +94,14 @@ const CrashReportsManagement = () => {
       setLoading(false);
     }
   }, [getToken]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // useEffect para buscar os dados apenas uma vez (ou quando getToken muda)
   useEffect(() => {
@@ -173,7 +188,6 @@ const CrashReportsManagement = () => {
   return (
     <ResponsiveTableWrapper>
       <h1>Gestão de Ocorrências</h1>
-
       <ControlsContainer>
         <SearchInput
           type="text"
@@ -183,76 +197,113 @@ const CrashReportsManagement = () => {
         />
       </ControlsContainer>
 
-      {displayCrashes.length === 0 && !loading && !error ? (
-        <Message>
-          Nenhuma ocorrência encontrada para os critérios atuais.
-        </Message>
+      {/* Renderização condicional com base no tamanho da tela */}
+      {isMobile ? (
+        // Se for mobile, renderiza como cards
+        <CardContainer>
+          {displayCrashes.map((crash) => (
+            <Card key={crash._id}>
+              <CardItem>
+                <CardLabel>ID:</CardLabel>
+                <CardValue>{crash._id.substring(0, 8)}...</CardValue>
+              </CardItem>
+              <CardItem>
+                <CardLabel>Nome:</CardLabel>
+                <CardValue>{crash.name}</CardValue>
+              </CardItem>
+              <CardItem>
+                <CardLabel>Placa 1:</CardLabel>
+                <CardValue>{crash.plate1}</CardValue>
+              </CardItem>
+              <CardItem>
+                <CardLabel>Placa 2:</CardLabel>
+                <CardValue>{crash.plate2 || "N/A"}</CardValue>
+              </CardItem>
+              <CardItem>
+                <CardLabel>Data:</CardLabel>
+                <CardValue>
+                  {new Date(crash.createdAt).toLocaleDateString()}
+                </CardValue>
+              </CardItem>
+              <CardItem>
+                <ActionButton
+                  onClick={() => handleViewDetails(crash._id)}
+                  primary
+                >
+                  Detalhes
+                </ActionButton>
+                <ActionButton onClick={() => handleDelete(crash._id)} danger>
+                  Excluir
+                </ActionButton>
+              </CardItem>
+            </Card>
+          ))}
+        </CardContainer>
       ) : (
-        <>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableHeader>ID</TableHeader>
-                  <TableHeader>Nome</TableHeader>
-                  <TableHeader>Placa 1</TableHeader>
-                  <TableHeader>Placa 2</TableHeader>
-                  <TableHeader>Data</TableHeader>
-                  <TableHeader>Ações</TableHeader>
+        // Se não for mobile, renderiza a tabela tradicional
+        <TableContainer>
+          <Table>
+            {/* ... (cabeçalho e corpo da sua tabela aqui) */}
+            <TableHead>
+              <TableRow>
+                <TableHeader>ID</TableHeader>
+                <TableHeader>Nome</TableHeader>
+                <TableHeader>Placa 1</TableHeader>
+                <TableHeader>Placa 2</TableHeader>
+                <TableHeader>Data</TableHeader>
+                <TableHeader>Ações</TableHeader>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {displayCrashes.map((crash) => (
+                <TableRow key={crash._id}>
+                  <TableCell>{crash._id.substring(0, 8)}...</TableCell>
+                  <TableCell>{crash.name}</TableCell>
+                  <TableCell>{crash.plate1}</TableCell>
+                  <TableCell>{crash.plate2 || "N/A"}</TableCell>
+                  <TableCell>
+                    {new Date(crash.createdAt).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    <ActionButton
+                      onClick={() => handleViewDetails(crash._id)}
+                      primary
+                    >
+                      Detalhes
+                    </ActionButton>
+                    <ActionButton
+                      onClick={() => handleDelete(crash._id)}
+                      danger
+                    >
+                      Excluir
+                    </ActionButton>
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {displayCrashes.map(
-                  (
-                    crash // Renderiza apenas as ocorrências da página atual
-                  ) => (
-                    <TableRow key={crash._id}>
-                      <TableCell>{crash._id.substring(0, 8)}...</TableCell>
-                      <TableCell>{crash.name}</TableCell>
-                      <TableCell>{crash.plate1}</TableCell>
-                      <TableCell>{crash.plate2 || "N/A"}</TableCell>
-                      <TableCell>
-                        {new Date(crash.createdAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        <ActionButton
-                          onClick={() => handleViewDetails(crash._id)}
-                          primary
-                        >
-                          Detalhes
-                        </ActionButton>
-                        <ActionButton
-                          onClick={() => handleDelete(crash._id)}
-                          danger
-                        >
-                          Excluir
-                        </ActionButton>
-                      </TableCell>
-                    </TableRow>
-                  )
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
 
-          <PaginationContainer>
-            <PaginationButton
-              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-              disabled={page === 1}
-            >
-              Anterior
-            </PaginationButton>
-            <span>
-              Página {page} de {totalPages}
-            </span>
-            <PaginationButton
-              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-              disabled={page === totalPages}
-            >
-              Próxima
-            </PaginationButton>
-          </PaginationContainer>
-        </>
+      {/* A paginação é compartilhada para ambas as visualizações */}
+      {displayCrashes.length > 0 && (
+        <PaginationContainer>
+          <PaginationButton
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            disabled={page === 1}
+          >
+            Anterior
+          </PaginationButton>
+          <span>
+            Página {page} de {totalPages}
+          </span>
+          <PaginationButton
+            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={page === totalPages}
+          >
+            Próxima
+          </PaginationButton>
+        </PaginationContainer>
       )}
     </ResponsiveTableWrapper>
   );

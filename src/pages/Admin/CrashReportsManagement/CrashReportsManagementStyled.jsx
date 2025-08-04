@@ -77,6 +77,10 @@ export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   min-width: 800px; // Garante uma largura mínima para a tabela, permitindo rolagem horizontal
+  // Esconde a tabela e os cabeçalhos em telas menores
+  @media (max-width: 768px) {
+    display: none; // Esconde a tabela por completo
+  }
 `;
 
 export const TableHead = styled.thead`
@@ -201,4 +205,41 @@ export const PaginationButton = styled.button`
     background-color: #cccccc;
     cursor: not-allowed;
   }
+`;
+
+export const CardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px; // Espaçamento entre os cards
+  margin-bottom: 20px;
+`;
+
+export const Card = styled.div`
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+`;
+
+export const CardItem = styled.div`
+  display: flex;
+  justify-content: center; // Alinha label e valor em lados opostos
+  font-size: 0.9em;
+  border-bottom: 1px solid #eee; // Linha divisória
+  padding-bottom: 5px;
+`;
+
+export const CardLabel = styled.span`
+  font-weight: bold;
+  color: #555;
+  margin-right: 5px;
+`;
+
+export const CardValue = styled.span`
+  color: #333;
+  word-break: break-word;
 `;

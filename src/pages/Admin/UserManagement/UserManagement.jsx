@@ -2,44 +2,19 @@ import React, { useState, useEffect, useContext } from "react";
 import api from "../../../services/api";
 import { ContentWrapper } from "../AdminPainelStyled";
 import { AuthContext } from "../../../Context/AuthContext";
-
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-
-// Componentes de estilo para a tabela
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-`;
-
-const Th = styled.th`
-  background-color: #f2f2f2;
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-`;
-
-const Td = styled.td`
-  border: 1px solid #ddd;
-  padding: 8px;
-  word-wrap: break-word;
-`;
-
-const Button = styled.button`
-  padding: 5px 10px;
-  margin-right: 5px;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  background-color: ${(props) => (props.danger ? "#e74c3c" : "#3498db")};
-
-  &:disabled {
-    background-color: #bdc3c7;
-    cursor: not-allowed;
-  }
-`;
+import {
+  Table,
+  Th,
+  Td,
+  Button,
+  ButtonContainer,
+  CardContainer,
+  Card,
+  CardItem,
+  CardLabel,
+  CardValue,
+} from "./UserManagementStyled";
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -47,6 +22,16 @@ const UserManagement = () => {
   const [error, setError] = useState(null);
   const { getToken } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -107,7 +92,31 @@ const UserManagement = () => {
   return (
     <ContentWrapper>
       <h1>Gerenciamento de Usuários</h1>
-      {users.length > 0 ? (
+
+      {isMobile ? (
+        <CardContainer>
+          {users.map((user) => (
+            <Card key={user._id}>
+              <CardItem>
+                <CardLabel>Nome:</CardLabel>
+                <CardValue>{user.name}</CardValue>
+              </CardItem>
+              <CardItem>
+                <CardLabel>Email:</CardLabel>
+                <CardValue>{user.email}</CardValue>
+              </CardItem>
+              <CardItem>
+                <ButtonContainer>
+                  <Button onClick={() => handleEdit(user._id)}>Editar</Button>
+                  <Button danger onClick={() => handleDelete(user._id)}>
+                    Excluir
+                  </Button>
+                </ButtonContainer>
+              </CardItem>
+            </Card>
+          ))}
+        </CardContainer>
+      ) : (
         <Table>
           <thead>
             <tr>
@@ -122,18 +131,20 @@ const UserManagement = () => {
                 <Td>{user.name}</Td>
                 <Td>{user.email}</Td>
                 <Td>
-                  <Button onClick={() => handleEdit(user._id)}>Editar</Button>
-                  <Button danger onClick={() => handleDelete(user._id)}>
-                    Excluir
-                  </Button>
+                  <ButtonContainer>
+                    <Button onClick={() => handleEdit(user._id)}>Editar</Button>
+                    <Button danger onClick={() => handleDelete(user._id)}>
+                      Excluir
+                    </Button>
+                  </ButtonContainer>
                 </Td>
               </tr>
             ))}
           </tbody>
         </Table>
-      ) : (
-        <p>Nenhum usuário encontrado.</p>
       )}
+
+      {users.length === 0 && !loading && <p>Nenhum usuário encontrado.</p>}
     </ContentWrapper>
   );
 };
