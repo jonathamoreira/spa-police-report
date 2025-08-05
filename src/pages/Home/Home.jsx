@@ -1,8 +1,6 @@
 // src/pages/Home/Home.jsx
 
 import React, { useState, useEffect, useRef } from "react";
-import { NavBar } from "../../Components/NavBar/NavBar";
-import { Footer } from "../../Components/Footer/Footer";
 import { FaArrowDown } from "react-icons/fa";
 
 import { Title, Text } from "../../styles/FormStyled";
@@ -92,7 +90,6 @@ const Home = () => {
 
   return (
     <>
-      <NavBar />
       <HomePageContainer>
         <HeroSection>
           <CarouselBackground
@@ -134,7 +131,6 @@ const Home = () => {
           </p>
         </SimpleCtaSection>
       </HomePageContainer>
-      <Footer />
     </>
   );
 };

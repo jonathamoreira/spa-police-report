@@ -2,8 +2,6 @@
 
 import React from "react";
 import { FormGrid, FormCard, Text } from "../../styles/FormStyled";
-import { NavBar } from "../../Components/NavBar/NavBar";
-import { Footer } from "../../Components/Footer/Footer";
 import {
   ContatoPageContainer,
   IntroSection,
@@ -41,8 +39,6 @@ const contatosSetores = [
 const Contato = () => {
   return (
     <ContatoPageContainer>
-      <NavBar />
-
       <IntroSection>
         <h1>Fale Conosco</h1>
         <Text>
@@ -69,8 +65,6 @@ const Contato = () => {
           ))}
         </FormGrid>
       </StyledFormWrapper>
-
-      <Footer />
     </ContatoPageContainer>
   );
 };

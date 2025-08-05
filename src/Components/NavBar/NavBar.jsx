@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { LogoLink } from "./NavBarStyled";
 import {
   Nav,
   TopBar,
@@ -8,6 +7,7 @@ import {
   Hamburger,
   NavLinks,
   BlinkLink,
+  LogoLink,
 } from "./NavBarStyled";
 
 export const NavBar = () => {
@@ -29,18 +29,18 @@ export const NavBar = () => {
           </Link>
         </LogoContainer>
 
+        <BlinkLink>
+          <Link to="/user/login" onClick={closeMenu}>
+            Bateu? Chama a equipe aqui
+          </Link>
+        </BlinkLink>
+
         <Hamburger onClick={() => setIsOpen(!isOpen)} type="button">
           <span />
           <span />
           <span />
         </Hamburger>
       </TopBar>
-
-      <BlinkLink>
-        <Link to="/user/login" onClick={closeMenu}>
-          Bateu? Chama a equipe aqui
-        </Link>
-      </BlinkLink>
 
       <NavLinks $isOpen={isOpen}>
         <li>

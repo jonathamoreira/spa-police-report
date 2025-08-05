@@ -2,9 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowDown } from "react-icons/fa";
 
-import { NavBar } from "../../Components/NavBar/NavBar";
-import { Footer } from "../../Components/Footer/Footer";
-
 import { Title, Text, Button } from "../../styles/FormStyled";
 
 import {
@@ -93,7 +90,6 @@ export default function Operacional() {
 
   return (
     <>
-      <NavBar />
       <PageContainer>
         <HeroSection>
           <CarouselBackground
@@ -148,7 +144,6 @@ export default function Operacional() {
           <Button onClick={handleIrParaLogin}>Fazer Login Agora</Button>
         </FinalCtaSection>
       </PageContainer>
-      <Footer />
     </>
   );
 }

@@ -1,9 +1,6 @@
 // src/pages/Servicos/Servicos.jsx
 
 import React from "react";
-import { NavBar } from "../../Components/NavBar/NavBar";
-import { Footer } from "../../Components/Footer/Footer";
-
 import { Text, Title } from "../../styles/FormStyled";
 import {
   ServicesPageContainer,
@@ -55,7 +52,6 @@ const servicos = [
 const Servicos = () => {
   return (
     <>
-      <NavBar />
       <ServicesPageContainer>
         <IntroSection>
           <Title>Explore Nossos Serviços</Title>
@@ -97,7 +93,6 @@ const Servicos = () => {
           </p>
         </FinalCtaSection>
       </ServicesPageContainer>
-      <Footer />
     </>
   );
 };

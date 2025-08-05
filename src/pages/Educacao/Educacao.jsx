@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
+// src/pages/Educacao/Educacao.jsx
+import React, { useState, useRef, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import { FaArrowDown } from "react-icons/fa";
 
-import { NavBar } from "../../Components/NavBar/NavBar";
-import { Footer } from "../../Components/Footer/Footer";
+//import { NavBar } from "../../Components/NavBar/NavBar";
+//import { Footer } from "../../Components/Footer/Footer";
 import {
-  Button,
   Title,
   Text,
   SubTitle,
@@ -16,14 +14,14 @@ import {
   FormTitle,
   Input,
   TextArea,
+  Button,
 } from "../../styles/FormStyled";
 import {
   EducacaoPageContainer,
   HeroSection,
-  HeroCarouselBackground,
+  HeroCarouselItem,
+  HeroContent,
   ScrollIndicator,
-  HighlightsSection,
-  EducacaoCarouselContainer,
   LatestActionsSection,
   ActionsGrid,
   ActionCard,
@@ -31,42 +29,58 @@ import {
   FinalCtaSection,
 } from "./EducacaoStyled";
 
+const useInterval = (callback, delay) => {
+  const savedCallback = useRef();
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      const id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+};
+
 const Educacao = () => {
-  const heroBackgroundImages = [
-    "/assets/educa3.jpg",
-    "/assets/educa4.jpg",
-    "/assets/educa5.jpg",
+  const latestActionsSectionRef = useRef(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const heroSlides = [
+    {
+      img: "/assets/educa3.jpg",
+      alt: "Imagem da campanha de educação para o trânsito 1",
+      title: "Educação para um Trânsito Mais Seguro",
+      text: "Promovemos a conscientização e a formação de condutores e pedestres responsáveis, visando um futuro mais seguro e consciente no trânsito.",
+    },
+    {
+      img: "/assets/educa4.jpg",
+      alt: "Imagem da campanha de educação para o trânsito 2",
+      title: "Cidadania no Trânsito",
+      text: "Nossa missão é educar para a vida, transformando o trânsito em um espaço de respeito, segurança e harmonia para todos.",
+    },
+    {
+      img: "/assets/educa5.jpg",
+      alt: "Imagem da campanha de educação para o trânsito 3",
+      title: "Formando Motoristas do Amanhã",
+      text: "Investimos em programas educativos para crianças e jovens, plantando a semente da responsabilidade desde cedo.",
+    },
   ];
 
-  const educacaoCarouselImages = ["/assets/educa1.jpg", "/assets/educa2.jpg"];
+  // Alterna o slide a cada 2 segundos
+  useInterval(() => {
+    setActiveSlide((prev) => (prev + 1) % heroSlides.length);
+  }, 5000); // Ajuste o tempo conforme necessário
 
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          dots: true,
-          infinite: true,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
+  const scrollToNextSection = () => {
+    latestActionsSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const latestActions = [
@@ -107,38 +121,6 @@ const Educacao = () => {
     },
   ];
 
-  const [currentHeroImageIndex, setCurrentHeroImageIndex] = useState(0);
-  const highlightsSectionRef = useRef(null);
-  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentHeroImageIndex(
-        (prevIndex) => (prevIndex + 1) % heroBackgroundImages.length
-      );
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [heroBackgroundImages.length]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 100) {
-        setShowScrollIndicator(false);
-      } else {
-        setShowScrollIndicator(true);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToNextSection = () => {
-    if (highlightsSectionRef.current) {
-      highlightsSectionRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   const [formData, setFormData] = useState({
     companyName: "",
     eventDate: "",
@@ -153,7 +135,6 @@ const Educacao = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Dados do formulário de solicitação:", formData);
     alert("Sua solicitação foi enviada! Entraremos em contato em breve.");
     setFormData({
       companyName: "",
@@ -165,43 +146,34 @@ const Educacao = () => {
 
   return (
     <>
-      <NavBar />
       <EducacaoPageContainer>
         <HeroSection>
-          <HeroCarouselBackground
-            style={{
-              backgroundImage: `url(${heroBackgroundImages[currentHeroImageIndex]})`,
-            }}
-          />
-          <Title>Educação para um Trânsito Mais Seguro</Title>
-          <Text>
-            Promovemos a conscientização e a formação de condutores e pedestres
-            responsáveis, visando um futuro mais seguro e consciente no
-            trânsito.
-          </Text>
-          <Button onClick={scrollToNextSection}>Saiba Mais</Button>
-          <ScrollIndicator
-            $isVisible={showScrollIndicator}
-            onClick={scrollToNextSection}
-          >
+          <AnimatePresence initial={false}>
+            {heroSlides.map(
+              (slide, index) =>
+                index === activeSlide && (
+                  <HeroCarouselItem
+                    key={index}
+                    $backgroundImage={slide.img}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1 }}
+                  >
+                    <HeroContent>
+                      <Title>{slide.title}</Title>
+                      <Text>{slide.text}</Text>
+                    </HeroContent>
+                  </HeroCarouselItem>
+                )
+            )}
+          </AnimatePresence>
+          <ScrollIndicator onClick={scrollToNextSection}>
             <FaArrowDown />
           </ScrollIndicator>
         </HeroSection>
 
-        <HighlightsSection ref={highlightsSectionRef}>
-          <SubTitle>Nossas Ações em Destaque</SubTitle>
-          <EducacaoCarouselContainer>
-            <Slider {...sliderSettings}>
-              {educacaoCarouselImages.map((img, index) => (
-                <div key={index}>
-                  <img src={img} alt={`Ação Educativa ${index + 1}`} />
-                </div>
-              ))}
-            </Slider>
-          </EducacaoCarouselContainer>
-        </HighlightsSection>
-
-        <LatestActionsSection>
+        <LatestActionsSection ref={latestActionsSectionRef}>
           <SubTitle>Últimas Iniciativas e Resultados</SubTitle>
           <ActionsGrid>
             {latestActions.map((action, index) => (
@@ -270,7 +242,6 @@ const Educacao = () => {
           </Button>
         </FinalCtaSection>
       </EducacaoPageContainer>
-      <Footer />
     </>
   );
 };

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { GlobalStyle } from "./styles/GlobalStyled";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import { NavBar } from "./Components/NavBar/NavBar";
+import { Footer } from "./Components/Footer/Footer";
 import { AuthContext } from "./Context/AuthContext";
 
 // Importe SEU componente ProtectedRoute
@@ -116,6 +117,7 @@ function App() {
         {/* Rota 404 - Deve ser a última */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer />
     </>
   );
 }
