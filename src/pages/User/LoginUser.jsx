@@ -39,7 +39,9 @@ export default function LoginUser() {
       navigate("/usuario"); // Redireciona para o dashboard do usuário
     } catch (error) {
       console.error("Erro no login:", error);
-      setErro("Email ou senha inválidos.");
+      // Alteração na linha abaixo!
+      // Capturamos a mensagem de erro que vem do backend, caso exista.
+      setErro(error.response?.data?.error || "E-mail ou senha inválidos.");
     }
   };
 

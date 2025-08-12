@@ -10,6 +10,8 @@ import { AuthContext } from "./Context/AuthContext";
 // Importe SEU componente ProtectedRoute
 import ProtectedRoute from "./Components/ProtectedRoute";
 
+import VerifyEmailPage from "./Components/VerifyEmailPage";
+
 // Importações das páginas públicas/comuns
 import Home from "./pages/Home/Home";
 import Educacao from "./pages/Educacao/Educacao";
@@ -53,6 +55,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         {/* Rotas Públicas/Comuns */}
+        <Route path="/user/verify-email" element={<VerifyEmailPage />} />
         <Route path="/" element={<Home />} />
         <Route path="/educacao" element={<Educacao />} />
         <Route path="/operacional" element={<Operacional />} />

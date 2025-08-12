@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importa o hook
+import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import {
   FormWrapper,
@@ -14,27 +14,38 @@ export default function CadastroUsuario() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // Instancia o hook
+  const [message, setMessage] = useState(""); // Novo estado para mensagens
+  const [isSuccess, setIsSuccess] = useState(false); // Novo estado para rastrear o sucesso
+  const navigate = useNavigate();
 
   const handleCadastro = async (e) => {
     e.preventDefault();
     console.log("handleCadastro foi chamado!");
     try {
-      await api.post("/user/register", {
+      const response = await api.post("/user/register", {
         name,
         email,
         password,
       });
-      alert("Usuário cadastrado com sucesso!");
-      setName("");
-      setEmail("");
-      setPassword("");
-      navigate("/user/login"); // Redireciona para a página de login
+      // Se a resposta for 201, mostramos a mensagem do backend
+      if (response.status === 201) {
+        setMessage(response.data.message);
+        setIsSuccess(true);
+        alert(
+          "Cadastro realizado com sucesso! Verifique seu e-mail para ativar sua conta."
+        );
+        // Limpamos os campos para um novo cadastro ou para manter a tela limpa
+        setName("");
+        setEmail("");
+        setPassword("");
+        navigate("/user/login"); // Redireciona para a página de login
+      }
     } catch (err) {
-      alert(
-        "Erro no cadastro: " +
-          (err.response?.data?.message || "Tente novamente")
-      );
+      // Aqui, o erro 409 pode ser tratado de forma mais específica
+      const errorMessage =
+        err.response?.data?.error || "Erro no cadastro. Tente novamente.";
+      setMessage(errorMessage);
+      setIsSuccess(false);
     }
   };
 
@@ -43,6 +54,11 @@ export default function CadastroUsuario() {
       <FormCard>
         <StyledForm onSubmit={handleCadastro}>
           <FormTitle>Cadastro de Usuário</FormTitle>
+          {/* Nova seção para exibir a mensagem */}
+          {message && (
+            <p style={{ color: isSuccess ? "green" : "red" }}>{message}</p>
+          )}
+          {/* ... seus Inputs e Button continuam aqui ... */}
           <Input
             type="text"
             placeholder="Nome"
